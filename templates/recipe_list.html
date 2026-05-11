@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="get">
+    <input type="text" name="q" placeholder="Search by name or category" value="{{ request.GET.q }}">
+    <button type="submit" class="btn btn-success">Search</button>
+
+</form>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for recipe in recipes %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><strong>{{ recipe.name }}</strong></h5>
+                <p class="card-text"><strong>Category:</strong>{{ recipe.category }}</p>
+
+                <p class="card-text"><strong>Ingredients:</strong>{{ recipe.ingredients }}</p>
+
+                <p class="card-text"><strong>Steps:</strong>{{ recipe.steps }}</p>
+
+                <a href="{% url 'recipe-update' recipe.pk %}" class="btn btn-success">Update</a>
+                <a href="{% url 'recipe-delete' recipe.pk %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <a href="{% url 'recipe-create' %}" class="btn btn-primary">Add New Recipes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if is_paginated %}
+<ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li>
+        <a href="?page={{ page_obj.previous_page_number}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link">Previous</a>
+    </li>
+    {% endif %}
+    
+    {% for i in page_obj.paginator.page_range %}
+    <li class="{% if i == page_obj.number %}active{% endif %}">
+        <a href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link" >{{ i }}</a>
+    </li>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li>
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link">Next</a>
+    </li>
+    {% endif %}
+</ul>
+{% endif %}
+{% endblock content %}
