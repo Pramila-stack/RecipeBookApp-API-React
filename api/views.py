@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.contrib.auth.models import Group, User
+import django_filters
 from rest_framework import permissions, viewsets, filters
 
 from api.models import Recipe
@@ -32,7 +33,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class RecipePagination(PageNumberPagination):
     page_size = 1
-    page_query_param = "page_size"
+    page_size_query_param = "page_size"
     max_page_size = 50
 
 
@@ -47,7 +48,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     pagination_class = RecipePagination
     permission_classes = [permissions.AllowAny]
 
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    filter_backends = [
+    django_filters.rest_framework.DjangoFilterBackend,
+    filters.SearchFilter,
+    filters.OrderingFilter,
+]
 
     # Search fields
     search_fields = ["name", "category", "ingredients"]
@@ -58,6 +63,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     # Default ordering
     ordering = ["-created_at"]
 
+    filterset_fields = ["category"]
+
+    
     
 
 
