@@ -9,6 +9,8 @@ from rest_framework import permissions, viewsets, filters
 from api.models import Recipe
 from api.serializers import GroupSerializer, RecipeSerializer, UserSerializer
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
+from .serializers import RegisterSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -64,6 +66,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     ordering = ["-created_at"]
 
     filterset_fields = ["category"]
+
+
+class RegisterView(generics.CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
 
     
     

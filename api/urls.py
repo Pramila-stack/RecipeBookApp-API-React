@@ -13,5 +13,6 @@ router.register(r"recipes", views.RecipeViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("register/", views.RegisterView.as_view(), name="register"),
 ]
 
